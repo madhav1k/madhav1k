@@ -1,0 +1,46 @@
+---
+interface Props {
+  command?: string;
+}
+
+const { command = "ls blog-posts" } = Astro.props;
+---
+
+<div class="prompt-wrapper">
+  <span class="prompt-sign">$</span>
+  <span class="prompt-command">{command}</span>
+</div>
+
+<style>
+  .prompt-wrapper {
+    margin-bottom: 15px;
+    font-family: 'Fira Code', monospace;
+    padding: 8px 0;
+    display: flex;
+    align-items: center;
+    letter-spacing: -0.3px;
+  }
+  
+  .prompt-sign {
+    color: var(--terminal-purple);
+    margin-right: 8px;
+    font-weight: bold;
+  }
+  
+  .prompt-command {
+    color: #4ecb6c;
+    font-size: 0.95em;
+    font-weight: 500;
+  }
+  
+  /* Syntax highlighting for common command parts */
+  .prompt-command :global(em) {
+    color: #e5c07b;
+    font-style: normal;
+  }
+  
+  .prompt-command :global(strong) {
+    color: #61afef;
+    font-weight: normal;
+  }
+</style>

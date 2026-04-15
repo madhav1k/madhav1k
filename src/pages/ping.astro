@@ -1,0 +1,189 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import CommandPrompt from '../components/CommandPrompt.astro';
+---
+
+<MainLayout title="Ping | Madhavik Dogra" description="Get in touch with me">
+  
+  <div class="ping-container">
+    <CommandPrompt command="ping --help" />
+    
+    <div class="terminal-output">
+      <p>
+        Usage: ping [options] target
+      </p>
+      <p>
+        Send a message to get in touch. I'm always interested in collaborating on
+        projects, consulting opportunities, or just having a great conversation about technology.
+      </p>
+    </div>
+    
+    <!-- Method 1: Google Forms with page redirect (most reliable) -->
+    <form class="contact-form" id="contact-form" action="https://docs.google.com/forms/d/e/1FAIpQLSd5sxqAlw6HBZtBepw-uc1yWvsHP1gGWpaKMRXg9z5xSH5-TQ/formResponse" method="POST">
+      <div class="form-group">
+        <CommandPrompt command="echo $NAME" />
+        <input type="text" id="name" name="entry.1911722558" placeholder="Your Name" required>
+      </div>
+      
+      <div class="form-group">
+        <CommandPrompt command="echo $EMAIL" />
+        <input type="email" id="email" name="entry.45717485" placeholder="your@email.com" required>
+      </div>
+      
+      <div class="form-group">
+        <CommandPrompt command="echo $MESSAGE | cat" />
+        <textarea id="message" name="entry.1680281214" rows="6" placeholder="Type your message here..." required></textarea>
+      </div>
+      
+      <button type="submit" class="submit-btn">Send Message</button>
+      <p class="form-note">
+        <small>Note: After submitting, you'll be redirected to Google Forms. Click "Back" to return to this site.</small>
+      </p>
+    </form>
+    
+    <!-- Alternate Method: Direct messaging links -->
+    <CommandPrompt command="ping --alt-routes" />
+    
+    <div class="alt-routes">
+      <div class="route">
+        <span class="route-arrow">→</span>
+        <span class="route-name">GitHub:</span>
+        <a href="https://github.com/madhav1k" target="_blank" rel="noopener">madhav1k</a>
+      </div>
+      
+      <div class="route">
+        <span class="route-arrow">→</span>
+        <span class="route-name">LinkedIn:</span>
+        <a href="https://www.linkedin.com/in/madhav1k" target="_blank" rel="noopener">in/madhav1k</a>
+      </div>
+      
+      <div class="route">
+        <span class="route-arrow">→</span>
+        <span class="route-name">Email:</span>
+        <a href="mailto:dogramadhavik@gmail.com">dogramadhavik@gmail.com</a>
+      </div>
+    </div>
+  </div>
+</MainLayout>
+
+<style>
+  .terminal-path {
+    color: var(--terminal-green);
+    margin-bottom: 15px;
+    font-family: 'Fira Code', monospace;
+    font-weight: bold;
+  }
+  
+  .ping-container {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .terminal-output {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-left: 1px solid var(--terminal-green);
+    padding: 10px 15px;
+    margin: 10px 0 20px 0;
+    border-radius: 4px;
+    opacity: 0.9;
+  }
+  
+  .terminal-output p {
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+  
+  .contact-form {
+    margin: 30px 0;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  input, textarea {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-color);
+    font-family: 'Fira Code', monospace;
+  }
+  
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--terminal-green);
+    box-shadow: 0 0 0 1px var(--terminal-green);
+  }
+  
+  .submit-btn {
+    background-color: rgba(12, 143, 32, 0.8);
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Fira Code', monospace;
+    transition: all 0.2s ease;
+  }
+  
+  .submit-btn:hover {
+    background-color: var(--terminal-blue);
+    transform: translateY(-1px);
+  }
+  
+  .form-note {
+    margin-top: 10px;
+    color: var(--date-color);
+    font-style: italic;
+  }
+  
+  .alt-routes {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-left: 1px solid var(--terminal-green);
+    padding: 10px 15px;
+    margin: 20px 0;
+    border-radius: 4px;
+    opacity: 0.9;
+  }
+  
+  .route {
+    padding: 5px 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  .route-arrow {
+    color: var(--terminal-green);
+    margin-right: 8px;
+  }
+  
+  .route-name {
+    color: var(--terminal-purple);
+    min-width: 80px;
+    margin-right: 5px;
+  }
+  
+  a {
+    color: var(--link-color);
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Form validation messages */
+  input:invalid, textarea:invalid {
+    border-color: var(--border-color);
+  }
+  
+  input:focus:invalid, textarea:focus:invalid {
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 1px #e74c3c;
+  }
+</style>

@@ -1,0 +1,287 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import CommandPrompt from '../components/CommandPrompt.astro';
+import { getCollection } from 'astro:content';
+import { formatDate } from '../utils/formatDate';
+
+const base = import.meta.env.BASE_URL;
+
+const allPosts = await getCollection('blog', ({ data }) => {
+  return import.meta.env.DEV || !data.draft;
+});
+
+const sortedPosts = allPosts.sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const recentPosts = sortedPosts.slice(0, 5);
+---
+
+<MainLayout title="Madhavik Dogra | Portfolio" description="Terminal-styled developer blog by Madhavik Dogra">
+  
+  <CommandPrompt command="cat welcome.md" />
+  
+  <div class="welcome-section">
+    <div class="content-wrapper">
+      <h1>I am Madhavik Dogra.</h1>
+      <p>
+        I'm a Full-Stack AI/ML & Systems Engineer.
+      </p>
+      <p>
+        Previously, I worked at <a href="https://www.nayan.co" target="_blank" rel="noopener" class="highlight-link">Nayan</a> as a Computer Vision Engineer, building real-time perception pipelines for traffic surveillance deployed across 12+ countries.
+      </p>
+      <p>
+        I love building systems end-to-end — from designing agentic LLM pipelines and training anomaly detection models to architecting databases, writing Swift packages, and shipping WebAssembly frontends.
+        I'm an open-source contributor to <a href="https://github.com/huggingface/transformers" target="_blank" rel="noopener" class="highlight-link">Hugging Face Transformers</a> and <a href="https://github.com/vllm-project/vllm" target="_blank" rel="noopener" class="highlight-link">vLLM</a>.
+      </p>
+    </div>
+  </div>
+  
+  <CommandPrompt command="ls quick-links" />
+  
+  <div class="terminal-nav-container">
+    <div class="content-wrapper">
+      <ul class="link-list">
+        <li>
+          <span class="arrow">→</span>
+          <a href={`${base}whoami`} class="terminal-link">cd ~/whoami</a>
+        </li>
+        <li>
+          <span class="arrow">→</span>
+          <a href={`${base}blog`} class="terminal-link">cd ~/blog</a>
+        </li>
+        <li>
+          <span class="arrow">→</span>
+          <a href={`${base}random`} class="terminal-link">cd ~/random</a>
+        </li>
+        <li>
+          <span class="arrow">→</span>
+          <a href={`${base}ping`} class="terminal-link">ping</a>
+        </li>
+        <li>
+          <span class="arrow">→</span>
+          <a href={`${base}assets/resume/MadhavikDogra.pdf`} target="_blank" rel="noopener noreferrer" class="terminal-link">cd ~/resume</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+  <CommandPrompt command="ls recent-posts" />
+  
+  <div class="post-list">
+    {recentPosts.map((post) => {
+      const { title, date } = post.data;
+      const formattedDate = formatDate(date);
+      const urlDate = date.toISOString().split('T')[0].replace(/-/g, '-');
+      
+      return (
+        <div class="post-item">
+          <div class="post-header">
+            <span class="post-marker">-</span>
+            <a href={`${base}blog/${post.slug}`} class="post-title">{title}</a>
+          </div>
+          <div class="post-meta">
+            <span class="post-date">📅 {formattedDate}</span>
+          </div>
+          <div class="post-link">
+            <span class="file-path">cat {urlDate}_{post.slug.replace(/\//g, '-')}.md</span>
+            <span class="arrow">→</span>
+            <a href={`${base}blog/${post.slug}`} class="read-more">Read</a>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+</MainLayout>
+
+<style>
+  .content-wrapper {
+    padding-left: 20px;
+  }
+  
+  .terminal-nav-container {
+    position: relative;
+    margin-bottom: 30px;
+    background-color: var(--terminal-bg-light);
+    border-radius: 6px;
+    padding: 0 0 10px 0;
+    overflow: hidden;
+  }
+  
+  .terminal-nav-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: var(--terminal-purple);
+  }
+  
+  .link-list {
+    list-style: none;
+    padding: 5px 15px 10px;
+    margin: 0;
+    font-family: 'Fira Code', monospace;
+  }
+  
+  .link-list li {
+    display: flex;
+    align-items: center;
+    padding: 4px 0;
+    font-size: 0.95em;
+    transition: background-color 0.2s;
+    border-radius: 3px;
+  }
+  
+  .link-list li:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  
+  .arrow {
+    color: var(--terminal-green);
+    margin-right: 10px;
+    font-weight: bold;
+  }
+  
+  .terminal-link {
+    color: var(--terminal-green);
+    text-decoration: none;
+    transition: color 0.2s;
+    display: inline-block;
+  }
+  
+  .terminal-link:hover {
+    text-decoration: underline;
+  }
+  
+  .welcome-section {
+    position: relative;
+    margin-bottom: 40px;
+    background: var(--terminal-bg-light);
+    padding: 20px 0;
+    border-radius: 6px;
+  }
+  
+  .welcome-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: var(--terminal-green);
+  }
+  
+  h1 {
+    color: var(--terminal-green);
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+  
+  p {
+    margin-bottom: 15px;
+    line-height: 1.6;
+  }
+  
+  .post-list {
+    margin-bottom: 40px;
+  }
+  
+  .post-item {
+    position: relative;
+    margin-bottom: 20px;
+    padding-left: 20px;
+  }
+  
+  .post-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: var(--terminal-green);
+  }
+  
+  .post-header {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 8px;
+  }
+  
+  .post-marker {
+    color: var(--terminal-green);
+    margin-right: 10px;
+    font-weight: bold;
+  }
+  
+  .post-title {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: inherit;
+    text-decoration: none;
+  }
+  
+  .post-title:hover {
+    color: var(--terminal-green);
+  }
+  
+  .post-meta {
+    margin-bottom: 8px;
+  }
+  
+  .post-date {
+    color: var(--date-color);
+    font-size: 0.9em;
+    background-color: var(--date-bg);
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+  
+  .post-link {
+    font-family: 'Fira Code', monospace;
+    display: flex;
+    align-items: center;
+    font-size: 0.85em;
+    margin-top: 8px;
+  }
+  
+  .file-path {
+    color: var(--command-color);
+  }
+  
+  .arrow {
+    color: var(--command-color);
+    margin: 0 8px;
+  }
+  
+  .read-more {
+    background-color: rgba(12, 143, 32, 0.8);
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #fff;
+    transition: all 0.2s ease;
+    text-decoration: none;
+  }
+  
+  .read-more:hover {
+    background-color: var(--terminal-blue);
+    transform: translateY(-1px);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 767px) {
+    .terminal-directory, .terminal-executable {
+      width: 80px;
+      font-size: 0.7em;
+    }
+    
+    .terminal-prompt {
+      width: 15px;
+    }
+  }
+</style>

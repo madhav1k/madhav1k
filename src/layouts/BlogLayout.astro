@@ -1,0 +1,470 @@
+---
+import MainLayout from './MainLayout.astro';
+import { formatDate } from '../utils/formatDate';
+
+const base = import.meta.env.BASE_URL;
+const { frontmatter } = Astro.props;
+const formattedDate = formatDate(frontmatter.date);
+---
+
+<MainLayout title={frontmatter.title}>
+  <!-- Add KaTeX CSS for math rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71HotJqlAn" crossorigin="anonymous">
+  
+  <div class="blog-path">~/blog/{frontmatter.title.toLowerCase().replace(/\s+/g, '-')}</div>
+  
+  <article class="blog-post">
+    <h1 class="blog-post-title">{frontmatter.title}</h1>
+    <div class="blog-post-date">📅 {formattedDate}</div>
+    
+    <div class="blog-post-content markdown-content">
+      <slot />
+    </div>
+    
+    <div class="blog-post-nav">
+      <a href={base} class="back-link">cd ..</a>
+    </div>
+  </article>
+</MainLayout>
+
+<style>
+  .blog-path {
+    color: var(--terminal-green);
+    margin-bottom: 20px;
+    font-size: 0.9em;
+  }
+  
+  .blog-post-title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  .blog-post-date {
+    color: var(--date-color);
+    font-size: 0.9em;
+    margin-bottom: 20px;
+    background-color: var(--date-bg);
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+  
+  .blog-post-content {
+    line-height: 1.6;
+    margin-bottom: 40px;
+  }
+
+  /* Enhanced Docusaurus-style markdown content */
+  .markdown-content {
+    --content-max-width: none;
+    --content-padding: 0;
+  }
+
+  /* Headings with anchor links */
+  .markdown-content :global(h1),
+  .markdown-content :global(h2),
+  .markdown-content :global(h3),
+  .markdown-content :global(h4),
+  .markdown-content :global(h5),
+  .markdown-content :global(h6) {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    line-height: 1.25;
+    position: relative;
+  }
+
+  .markdown-content :global(h1) {
+    font-size: 2rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+  }
+
+  .markdown-content :global(h2) {
+    font-size: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.25rem;
+  }
+
+  .markdown-content :global(h3) {
+    font-size: 1.25rem;
+  }
+
+  .markdown-content :global(h4) {
+    font-size: 1.1rem;
+  }
+
+  /* Header anchor links */
+  .markdown-content :global(.header-anchor) {
+    opacity: 0;
+    transition: opacity 0.2s;
+    text-decoration: none;
+    margin-left: 0.5rem;
+  }
+
+  .markdown-content :global(h1:hover .header-anchor),
+  .markdown-content :global(h2:hover .header-anchor),
+  .markdown-content :global(h3:hover .header-anchor),
+  .markdown-content :global(h4:hover .header-anchor),
+  .markdown-content :global(h5:hover .header-anchor),
+  .markdown-content :global(h6:hover .header-anchor) {
+    opacity: 1;
+  }
+
+  /* Paragraphs */
+  .markdown-content :global(p) {
+    margin-bottom: 1rem;
+    line-height: 1.7;
+  }
+
+  /* Lists */
+  .markdown-content :global(ul),
+  .markdown-content :global(ol) {
+    margin-bottom: 1rem;
+    padding-left: 0.5rem;
+  }
+
+  .markdown-content :global(li) {
+    margin-bottom: 0.25rem;
+    line-height: 1.6;
+  }
+
+  /* Enhanced bullet point styling */
+  .markdown-content :global(ul) {
+    list-style: none;
+  }
+
+  .markdown-content :global(ul > li) {
+    position: relative;
+    padding-left: 1.25rem;
+  }
+
+  .markdown-content :global(ul > li::before) {
+    content: "●";
+    position: absolute;
+    left: 0;
+    color: white;
+    font-size: 0.6em;
+    font-weight: bold;
+    top: 0.8em;
+    line-height: 1;
+  }
+
+  /* Nested list bullets - different styles for each level */
+  .markdown-content :global(ul ul > li::before) {
+    content: "○";
+    color: white;
+    font-size: 0.6em;
+    font-weight: normal;
+    top: 0.8em;
+    line-height: 1;
+  }
+
+  .markdown-content :global(ul ul ul > li::before) {
+    content: "■";
+    color: white;
+    font-size: 1em;
+    font-weight: bold;
+    top: 0.15em;
+    line-height: 1;
+  }
+
+  .markdown-content :global(ul ul ul ul > li::before) {
+    content: "→";
+    color: white;
+    font-size: 1.1em;
+    font-weight: normal;
+    top: 0.1em;
+    line-height: 1;
+  }
+
+  /* Ordered lists with enhanced numbering */
+  .markdown-content :global(ol) {
+    counter-reset: list-counter;
+  }
+
+  .markdown-content :global(ol > li) {
+    position: relative;
+    padding-left: 1.25rem;
+    counter-increment: list-counter;
+    list-style: none;
+  }
+
+  .markdown-content :global(ol > li::before) {
+    content: counter(list-counter) ".";
+    position: absolute;
+    left: 0;
+    color: var(--terminal-green);
+    font-weight: bold;
+    font-size: 1em;
+    min-width: 1.5rem;
+  }
+
+  /* Nested ordered lists */
+  .markdown-content :global(ol ol > li::before) {
+    color: #0ea5e9;
+  }
+
+  .markdown-content :global(ol ol ol > li::before) {
+    color: #f59e0b;
+  }
+
+  .markdown-content :global(li > p) {
+    margin-bottom: 0.5rem;
+  }
+
+  /* Nested lists */
+  .markdown-content :global(li > ul),
+  .markdown-content :global(li > ol) {
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Tables */
+  .markdown-content :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    display: block;
+    white-space: nowrap;
+  }
+
+  .markdown-content :global(thead) {
+    background-color: var(--highlight-bg);
+  }
+
+  .markdown-content :global(th),
+  .markdown-content :global(td) {
+    border: 1px solid var(--border-color);
+    padding: 0.75rem;
+    text-align: left;
+  }
+
+  .markdown-content :global(th) {
+    font-weight: 600;
+  }
+
+  .markdown-content :global(tr:nth-child(even)) {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  /* Code blocks */
+  .markdown-content :global(pre) {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    background-color: var(--highlight-bg) !important;
+    position: relative;
+  }
+
+  .markdown-content :global(pre code) {
+    background: transparent !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  /* Inline code */
+  .markdown-content :global(code) {
+    font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', monospace;
+    background-color: var(--highlight-bg);
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+  }
+
+  /* Code titles (from rehype-code-titles) */
+  .markdown-content :global(.rehype-code-title) {
+    background-color: var(--border-color);
+    color: var(--text-color);
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    margin-bottom: 0;
+  }
+
+  .markdown-content :global(.rehype-code-title + pre) {
+    margin-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  /* Blockquotes */
+  .markdown-content :global(blockquote) {
+    margin: 1.5rem 0;
+    padding: 0 1rem;
+    border-left: 4px solid var(--terminal-green);
+    background-color: var(--highlight-bg);
+    border-radius: 0 0.25rem 0.25rem 0;
+    font-style: italic;
+  }
+
+  .markdown-content :global(blockquote p) {
+    margin: 1rem 0;
+  }
+
+  /* Horizontal rules */
+  .markdown-content :global(hr) {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 2rem 0;
+  }
+
+  /* Links */
+  .markdown-content :global(a) {
+    color: var(--terminal-green);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+
+  .markdown-content :global(a:hover) {
+    border-bottom-color: var(--terminal-green);
+  }
+
+  /* Images */
+  .markdown-content :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+  }
+
+  /* Task lists (GitHub-style checkboxes) */
+  .markdown-content :global(input[type="checkbox"]) {
+    margin-right: 0.75rem;
+    transform: scale(1.2);
+    accent-color: var(--terminal-green);
+    cursor: pointer;
+  }
+
+  .markdown-content :global(li.task-list-item) {
+    list-style: none;
+    margin-left: -2rem;
+    padding-left: 2rem;
+    position: relative;
+  }
+
+  /* Remove custom bullets for task list items */
+  .markdown-content :global(li.task-list-item::before) {
+    display: none;
+  }
+
+  /* Custom checkbox styling for better visibility */
+  .markdown-content :global(li.task-list-item input[type="checkbox"]) {
+    position: relative;
+    margin-right: 0.75rem;
+    margin-left: 0;
+    width: 1.1rem;
+    height: 1.1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 0.25rem;
+    background-color: transparent;
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .markdown-content :global(li.task-list-item input[type="checkbox"]:checked) {
+    background-color: var(--terminal-green);
+    border-color: var(--terminal-green);
+  }
+
+  .markdown-content :global(li.task-list-item input[type="checkbox"]:checked::after) {
+    content: "✓";
+    position: absolute;
+    top: -1px;
+    left: 2px;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: bold;
+  }
+
+  /* Table of Contents */
+  .markdown-content :global(.toc) {
+    background-color: var(--highlight-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .markdown-content :global(.toc > ul) {
+    margin: 0;
+    padding-left: 1rem;
+  }
+
+  .markdown-content :global(.toc li) {
+    margin-bottom: 0.25rem;
+  }
+
+  /* Math equations */
+  .markdown-content :global(.katex) {
+    font-size: 1.1em;
+  }
+
+  .markdown-content :global(.katex-display) {
+    margin: 1.5rem 0;
+    text-align: center;
+  }
+
+  /* Admonitions/Callouts style */
+  .markdown-content :global(.admonition) {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    border-left: 4px solid;
+    border-radius: 0 0.5rem 0.5rem 0;
+    background-color: var(--highlight-bg);
+  }
+
+  .markdown-content :global(.admonition.note) {
+    border-left-color: #0ea5e9;
+  }
+
+  .markdown-content :global(.admonition.tip) {
+    border-left-color: #10b981;
+  }
+
+  .markdown-content :global(.admonition.warning) {
+    border-left-color: #f59e0b;
+  }
+
+  .markdown-content :global(.admonition.danger) {
+    border-left-color: #ef4444;
+  }
+
+  /* Definition lists */
+  .markdown-content :global(dl) {
+    margin: 1rem 0;
+  }
+
+  .markdown-content :global(dt) {
+    font-weight: 600;
+    margin-top: 1rem;
+  }
+
+  .markdown-content :global(dd) {
+    margin-left: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .blog-post-nav {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--border-color);
+  }
+  
+  .back-link {
+    display: inline-block;
+    color: var(--terminal-green);
+    padding: 5px 10px;
+    border-radius: 3px;
+    background-color: var(--highlight-bg);
+  }
+</style>

@@ -1,0 +1,130 @@
+---
+const base = import.meta.env.BASE_URL;
+const routePath = Astro.url.pathname.replace(base, '/').replace(/\/+/g, '/');
+---
+
+<header class="header">
+  <div class="terminal-header">
+    <div class="terminal-dots">
+      <div class="dot red"></div>
+      <div class="dot yellow"></div>
+      <div class="dot green"></div>
+    </div>
+    <nav class="terminal-nav">
+      <a href={base} class={`command ${routePath === '/' ? 'active' : ''}`}>cd ~</a>
+      <a href={`${base}blog`} class={`command ${routePath.startsWith('/blog') ? 'active' : ''}`}>cd ~/blog</a>
+      <a href={`${base}random`} class={`command ${routePath === '/random' ? 'active' : ''}`}>rand</a>
+      <a href={`${base}whoami`} class={`command ${routePath === '/whoami' ? 'active' : ''}`}>whoami</a>
+      <a href={`${base}ping`} class={`command ${routePath === '/ping' ? 'active' : ''}`}>ping</a>
+      <a href={`${base}assets/resume/MadhavikDogra.pdf`} target="_blank" rel="noopener noreferrer" class="command">cd ~/resume</a>
+      <button id="subscribe-button" class="command subscribe-btn">subscribe</button>
+    </nav>
+    <span class="prompt">$</span>
+    <button id="search-button" class="search-button">
+      search <span class="search-term">--query='search term'</span>
+    </button>
+  </div>
+</header>
+
+<style>
+  .header {
+    background-color: var(--header-bg);
+    padding: 10px;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .terminal-header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .terminal-dots {
+    display: flex;
+    margin-right: 15px;
+  }
+  
+  .terminal-nav {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .command {
+    color: var(--command-color);
+    margin-right: 10px;
+    white-space: nowrap;
+    text-decoration: none;
+    padding: 3px 6px;
+    border-radius: 3px;
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  .subscribe-btn {
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+  }
+  
+  .command:hover {
+    background-color: var(--highlight-bg);
+    text-decoration: none;
+  }
+  
+  .command.active {
+    color: var(--terminal-green);
+    font-weight: 500;
+  }
+  
+  .prompt {
+    color: var(--terminal-purple);
+    margin-right: 5px;
+  }
+  
+  .search-button {
+    color: var(--terminal-blue);
+    margin-left: auto;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+    display: flex;
+    align-items: center;
+    padding: 3px 0;
+  }
+  
+  .search-term {
+    background-color: var(--highlight-bg);
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-left: 5px;
+  }
+  
+  @media (max-width: 768px) {
+    .terminal-header {
+      overflow-x: auto;
+    }
+    
+    .search-button {
+      margin-left: 10px;
+    }
+  }
+</style>
+
+<script>
+  const searchButton = document.getElementById('search-button');
+  
+  searchButton?.addEventListener('click', () => {
+    document.dispatchEvent(new CustomEvent('toggle-search'));
+  });
+
+  const subscribeButton = document.getElementById('subscribe-button');
+  subscribeButton?.addEventListener('click', () => {
+    document.dispatchEvent(new CustomEvent('open-newsletter'));
+  });
+</script>

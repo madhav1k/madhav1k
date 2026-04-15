@@ -1,0 +1,24 @@
+---
+import { getCollection } from 'astro:content';
+import MainLayout from '../../layouts/MainLayout.astro';
+import BlogPostPreview from '../../components/BlogPostPreview.astro';
+import BlogPostListPreview from '../../components/BlogPostListPreview.astro';
+import CommandPrompt from '../../components/CommandPrompt.astro';
+
+// Get all blog posts, sorted by date
+const allPosts = await getCollection('blog', ({ data }) => {
+  return import.meta.env.DEV || !data.draft;
+});
+
+const sortedPosts = allPosts.sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+---
+
+<MainLayout title="Blog Posts | Terminal Blog" description="List of all blog posts">
+  <CommandPrompt command="ls -la blog-posts/" />
+  <BlogPostListPreview posts={sortedPosts} />
+
+  <CommandPrompt command="cat blog-posts/*" />
+  {sortedPosts.map(post => <BlogPostPreview post={post} />)}
+</MainLayout>

@@ -1,0 +1,109 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import CommandPrompt from '../components/CommandPrompt.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<MainLayout title="About | Madhavik Dogra" description="About me and this blog">
+  <CommandPrompt command="cat about.md" />
+  
+  <div class="about-page">
+    
+    <div class="about-section">
+      <h2 class="terminal-link"><a href={`${base}whoami`}>~/whoami</a></h2> 
+      <p>
+        Hi, I'm Madhavik Dogra — a Full-Stack AI/ML & Systems Engineer.
+        I solo-architected and deployed an AI-powered collaborative knowledge platform using Swift/Vapor, Neo4j, PostgreSQL, LangGraph, and WebAssembly on AWS.
+      </p>
+      <p>
+        Previously, I worked at <a href="https://www.nayan.co" target="_blank" rel="noopener" class="highlight-link">Nayan</a> as a Computer Vision Engineer, shipping production perception systems — anomaly detection, person tracking, and ANPR — for traffic surveillance across 12+ countries.
+      </p>
+      <p>
+        I'm an open-source contributor to Hugging Face Transformers and vLLM, and I hold certifications from NVIDIA DLI and HarvardX (CS50x, CS50AI). B.Tech in CS (AI Specialization) from Bennett University.
+      </p>
+    </div>
+    
+    <div class="about-section">
+      <h1> Why this blog?</h2>
+      <p>
+        This blog serves as a platform for me to document my learnings, experiments, and thoughts about AI, systems engineering, and building things from scratch.
+      </p>
+    </div>
+    
+    <div class="about-section">
+      <h2 class="terminal-link"><a href={`${base}ping`}>~/ping</a></h2> 
+      <p>
+        Feel free to reach out to me through any of the following channels or just <a href={`${base}ping`} class="highlight-link">ping me here</a>:
+      </p>
+      <ul class="contact-list">
+        <li><span class="contact-label">Email:</span> <a href="mailto:dogramadhavik@gmail.com" target="_blank" rel="noopener">dogramadhavik@gmail.com</a></li>
+        <li><span class="contact-label">GitHub:</span> <a href="https://github.com/madhav1k" target="_blank" rel="noopener">madhav1k</a></li>
+        <li><span class="contact-label">LinkedIn:</span> <a href="https://www.linkedin.com/in/madhav1k" target="_blank" rel="noopener">madhav1k</a></li>
+      </ul>
+    </div>
+  </div>
+</MainLayout>
+
+<style>
+  .about-page {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  h1 {
+    color: var(--terminal-green);
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+  }
+  
+  .about-section {
+    margin-bottom: 40px;
+  }
+  
+  h2 {
+    color: var(--terminal-purple);
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    font-weight: normal;
+  }
+  
+  .terminal-link a {
+    color: inherit;
+    text-decoration: none;
+  }
+  
+  .terminal-link a:hover {
+    text-decoration: underline;
+  }
+  
+  p {
+    margin-bottom: 15px;
+    line-height: 1.6;
+  }
+  
+  .contact-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .contact-list li {
+    margin-bottom: 10px;
+    padding: 5px 0;
+  }
+  
+  .contact-label {
+    display: inline-block;
+    min-width: 70px;
+    color: var(--date-color);
+  }
+  
+  a {
+    color: var(--link-color);
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+</style>

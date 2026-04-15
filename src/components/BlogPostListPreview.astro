@@ -1,0 +1,131 @@
+---
+import { formatDate } from '../utils/formatDate';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+}
+
+const base = import.meta.env.BASE_URL;
+const { posts } = Astro.props;
+---
+
+<div class="post-list">
+  <div class="post-items">
+    {posts.map((post) => {
+      const { title, date } = post.data;
+      const formattedDate = formatDate(date);
+      const urlDate = date.toISOString().split('T')[0].replace(/-/g, '-');
+      
+      return (
+        <div class="post-item">
+          <span class="file-name">
+            <a href={`${base}blog/${post.slug}`} class="post-link">
+              {post.slug.replace(/\//g, '-')}.md
+            </a>
+          </span>
+          <span class="file-date">{formattedDate}</span>
+        </div>
+      );
+    })}
+  </div>
+  
+  <div class="list-footer">
+    <span>Total: {posts.length} blog posts</span>
+  </div>
+</div>
+
+<style>
+  .post-list {
+    font-family: 'Fira Code', monospace;
+    margin-bottom: 30px;
+    padding: 0.5rem;
+    background-color: transparent;
+    position: relative;
+    max-width: 100%;
+  }
+  
+  .post-items {
+    position: relative;
+    padding-left: 10px;
+    border-left: 1px solid var(--terminal-green);
+    opacity: 0.8;
+  }
+  
+  .post-item {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    padding: 3px 10px;
+    position: relative;
+  }
+  
+  .post-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10px;
+    right: 10px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.07);
+  }
+  
+  .post-item:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  .file-name {
+    color: var(--terminal-green);
+  }
+  
+  .file-date {
+    color: var(--date-color);
+    opacity: 0.6;
+    font-size: 0.85em;
+    font-style: italic;
+    text-align: right;
+    justify-self: end;
+    padding-right: 10px;
+  }
+  
+  .post-link {
+    color: var(--terminal-green);
+    text-decoration: none;
+  }
+  
+  .post-link:hover {
+    text-decoration: underline;
+  }
+  
+  .list-footer {
+    padding: 10px 20px 0 0;
+    margin-top: 8px;
+    color: var(--text-color);
+    font-size: 0.9em;
+    text-align: right;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  /* Dark mode adjustment */
+  :global(.dark-theme) .post-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  
+  /* Light mode adjustment for the separator */
+  @media (prefers-color-scheme: light) {
+    .post-item:not(:last-child)::after {
+      background: rgba(0, 0, 0, 0.05);
+    }
+  }
+  
+  :global(.dark-theme) .post-item:not(:last-child)::after {
+    background: rgba(255, 255, 255, 0.07);
+  }
+  
+  @media (max-width: 767px) {
+    .post-item {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+</style> 
