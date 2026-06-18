@@ -1,5 +1,5 @@
 ### Hi there, I'm Madhavik Dogra 👋
-- 🔭 Full-Stack AI/ML & Systems Engineer
+- 🔭 AI/ML Engineer
 - 💬 Open source contributor (Apple MLX)
 
 #### 📫 Connect with me on:
